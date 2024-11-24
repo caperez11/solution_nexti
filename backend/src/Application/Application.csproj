@@ -10,4 +10,22 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstractions\" />
+      <Folder Include="Features\Events\Command\AddEvent\" />
+      <Folder Include="Features\Events\Command\DeleteEvent\" />
+      <Folder Include="Features\Events\Query\GetEvents\" />
+      <Folder Include="Features\Events\Query\GetEvent\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.1.35" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Serilog" Version="4.1.0" />
+    </ItemGroup>
+
 </Project>
