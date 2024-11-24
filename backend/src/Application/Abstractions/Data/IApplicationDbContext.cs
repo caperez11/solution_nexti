@@ -3,7 +3,4 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Abstractions.Data;
 
-public interface IApplicationDbContext
-{
-    DbSet<Event> Events { get; }
-}
+public interface IApplicationDbContext;
