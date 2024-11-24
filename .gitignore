@@ -1,0 +1,25 @@
+# C# backend
+backend/[Bb]in/
+backend/[Oo]bj/
+backend/*.user
+backend/*.suo
+backend/*.dll
+backend/*.exe
+backend/*.pdb
+backend/*.mdb
+backend/packages/
+backend/.nuget/
+
+# React frontend
+fronted/node_modules/
+fronted/build/
+fronted/dist/
+fronted/*.log
+fronted/coverage/
+fronted/.env
+fronted/.env.*
+
+# General ignores
+.DS_Store
+.idea/
+.vscode/
