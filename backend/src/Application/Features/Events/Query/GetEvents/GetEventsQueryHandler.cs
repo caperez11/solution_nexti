@@ -1,3 +1,4 @@
+using System.Globalization;
 using Application.Abstractions.Messaging.Query;
 using Domain.Abstractions;
 using Domain.Events.Repository;
@@ -15,12 +16,13 @@ public sealed class GetEventsQueryHandler(IEventRepository eventRepository): IQu
         {
             var result = await eventRepository.GetEvents(request.PageNumber, request.PageSize, cancellationToken);
             
-            var lstResult = result.Events.Select(x => new EventResponse2
+            var lstResult = result.Events.Select(x => new EventDto
             {
                 Id = x.Id,
                 NameEvent = x.NameEvent,
                 Description = x.Description,
                 Location = x.Location,
+                Price = x.Price.ToString("C", CultureInfo.GetCultureInfo("en-US")),
                 DateEvent = x.DateEvent,
                 CreateAt = x.CreatedAt
                 
@@ -29,6 +31,8 @@ public sealed class GetEventsQueryHandler(IEventRepository eventRepository): IQu
             eventResponse.Events = lstResult;
             eventResponse.HasPrevious = result.HasPrevious;
             eventResponse.HasNext = result.HasNext;
+            eventResponse.TotalRecords = result.TotalRecords;
+            eventResponse.TotalPages = result.TotalPages;
             
 
         }

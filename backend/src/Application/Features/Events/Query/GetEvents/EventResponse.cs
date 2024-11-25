@@ -1,6 +1,6 @@
 namespace Application.Features.Events.Query.GetEvents;
 
-public class EventResponse2
+public class EventDto
 {
     public Guid Id { get; set; }
 
@@ -9,6 +9,8 @@ public class EventResponse2
     public string Description { get; set; } = null!;
 
     public string Location { get; set; } = null!;
+    
+    public string Price { get; set; } = null!;
 
     public DateTime DateEvent { get; set; }
 
@@ -18,8 +20,10 @@ public class EventResponse2
 
 public sealed class EventResponse
 {
-    public IReadOnlyList<EventResponse2> Events { get; set; } = null!;
+    public IReadOnlyList<EventDto> Events { get; set; } = null!;
     public bool HasPrevious { get; set; }
     public bool HasNext { get; set; }
+    public int TotalRecords { get; set; }
+    public int TotalPages { get; set; }
     
 }

@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import AppTheme from './theme/AppTheme';
+import AppNavbar from './components/AppNavbar.tsx';
+import SideMenu from './components/SideMenu.tsx';
+import Header from './components/Header.tsx';
+import EventsPage from './events/pages/Events.tsx';
 
-function App() {
-  const [count, setCount] = useState(0)
+const xThemeComponents = {};
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export default function Dashboard(props: { disableCustomTheme?: boolean }) {
+    return (
+        <AppTheme {...props} themeComponents={xThemeComponents}>
+            <CssBaseline enableColorScheme />
+            <Box sx={{ display: 'flex' }}>
+                <SideMenu />
+                <AppNavbar />
+                <Box
+                    component="main"
+                    sx={(theme) => ({
+                        flexGrow: 1,
+                        backgroundColor: theme.palette.background.default,
+                        overflow: 'auto',
+                    })}
+                >
+                    <Stack
+                        spacing={2}
+                        sx={{
+                            alignItems: 'center',
+                            mx: 3,
+                            pb: 5,
+                            mt: { xs: 8, md: 0 },
+                        }}
+                    >
+                        <Header />
+                        <EventsPage />
+                    </Stack>
+                </Box>
+            </Box>
+        </AppTheme>
+    );
 }
-
-export default App

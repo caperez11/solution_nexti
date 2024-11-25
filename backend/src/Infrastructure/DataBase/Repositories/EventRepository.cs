@@ -18,7 +18,7 @@ public sealed class EventRepository(ApplicationDbContext dbContext) : Repository
         _sqlConnectionFactory = sqlConnectionFactory ?? throw new ArgumentNullException(nameof(sqlConnectionFactory));
     }
 
-    public async Task<(IReadOnlyList<Event> Events, bool HasPrevious, bool HasNext)> GetEvents(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<(IReadOnlyList<Event> Events, bool HasPrevious, bool HasNext, int TotalRecords, int TotalPages)> GetEvents(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         // Filtrar los eventos por Status = true
         var query = _dbContext.Set<Event>().Where(e => e.Status);
@@ -40,7 +40,8 @@ public sealed class EventRepository(ApplicationDbContext dbContext) : Repository
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        return (events, hasPrevious, hasNext);
+        var totalPages = (int)Math.Ceiling(totalEvents / (double)pageSize);
+        return (events, hasPrevious, hasNext, totalEvents, totalPages);
     }
 
     public async Task<(int ErrorCode, string ErrorMessage)> DeleteEventAsync(Guid id)
