@@ -17,14 +17,20 @@ public sealed class Event : Entity
 
     }
 
-    public string NameEvent { get; set; }
+    public string NameEvent { get; init; } = null!;
 
-    public string Location { get; set; }
+    public string Location { get; init; } = null!;
 
-    public string Description { get; set; }
+    public string Description { get; init; } = null!;
 
-    public DateTime DateEvent { get; set; }
+    public DateTime DateEvent { get; init; }
 
-    public decimal Price { get; set; }
+    public decimal Price { get; init; }
+
+
+    public static Result<Event> Create(string nameEvent, string location, string description, DateTime dateEvent, decimal price)
+    {
+        return Result.Success(new Event(Guid.NewGuid(), DateTime.UtcNow, true, nameEvent, location, description, dateEvent, price));
+    }
 
 }

@@ -18,7 +18,7 @@ internal sealed class ExceptionHandlingMiddleware(
         {
             logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
 
-            ExceptionDetails exceptionDetails = GetExceptionDetails(exception);
+            var exceptionDetails = GetExceptionDetails(exception);
 
             var problemDetails = new ProblemDetails
             {

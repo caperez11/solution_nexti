@@ -8,24 +8,26 @@ public sealed class EventConfiguration : IEntityTypeConfiguration<Event>
 {
     public void Configure(EntityTypeBuilder<Event> builder)
     {
-        builder.ToTable("users");
+        builder.ToTable("events");
 
-        builder.HasKey(user => user.Id);
+        builder.HasKey(e => e.Id);
+        
+        builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+        
+        builder.Property(e => e.NameEvent).HasColumnName("name").IsRequired().HasMaxLength(100);
 
-        builder.Property(user => user.FirstName)
-            .HasMaxLength(200)
-            .HasConversion(firstName => firstName.Value, value => new FirstName(value));
+        builder.Property(e => e.Description).HasColumnName("description").IsRequired().HasMaxLength(255);
 
-        builder.Property(user => user.LastName)
-            .HasMaxLength(200)
-            .HasConversion(firstName => firstName.Value, value => new LastName(value));
+        builder.Property(e => e.Location).HasColumnName("location").IsRequired().HasMaxLength(100);
 
-        builder.Property(user => user.Email)
-            .HasMaxLength(400)
-            .HasConversion(email => email.Value, value => new Email(value));
+        builder.Property(e => e.Price).HasColumnName("price").IsRequired().HasPrecision(18, 2).HasDefaultValue(0.00);
+        
+        builder.Property(e => e.DateEvent).HasColumnName("date").IsRequired();
 
-        builder.HasIndex(user => user.Email).IsUnique();
+        builder.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired().HasDefaultValue(DateTime.UtcNow);
 
-        builder.HasIndex(user => user.IdentityId).IsUnique();
+        builder.Property(e => e.Status).HasColumnName("status").IsRequired().HasDefaultValue(true);
+        
+        builder.HasIndex(e => e.NameEvent).IsUnique();
     }
 }

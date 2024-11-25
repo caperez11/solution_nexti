@@ -1,16 +1,14 @@
-using Application.Abstractions.Clock;
+using Application.Abstractions.Exceptions;
 using Domain.Abstractions;
 using Domain.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataBase;
 
-public sealed class ApplicationDbContext(
-    DbContextOptions options,
-    IDateTimeProvider dateTimeProvider) : DbContext(options), IUnitOfWork
+public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
 {
 
-    public DbSet<Event> Events { get; set; }
+    public DbSet<Event> Events { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,7 +27,7 @@ public sealed class ApplicationDbContext(
         }
         catch (DbUpdateException ex)
         {
-            throw new ConcurrencyException("Concurrency exception occurred.", ex);
+            throw new DataException("Data Base exception occurred.", ex);
         }
     }
     

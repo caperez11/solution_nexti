@@ -12,10 +12,6 @@
 
     <ItemGroup>
       <Folder Include="Abstractions\" />
-      <Folder Include="Features\Events\Command\AddEvent\" />
-      <Folder Include="Features\Events\Command\DeleteEvent\" />
-      <Folder Include="Features\Events\Query\GetEvents\" />
-      <Folder Include="Features\Events\Query\GetEvent\" />
     </ItemGroup>
 
     <ItemGroup>

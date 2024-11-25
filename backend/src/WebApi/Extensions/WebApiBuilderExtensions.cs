@@ -15,4 +15,14 @@ public static class WebApiBuilderExtensions
 
         return app;
     }
+    
+    public static void UseCustomCors(this IApplicationBuilder app)
+    {
+        app.UseCors(builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+    }
 }
