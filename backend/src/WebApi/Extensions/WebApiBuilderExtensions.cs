@@ -1,3 +1,5 @@
+using Infrastructure.DataBase;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Middleware;
 
 namespace WebApi.Extensions;
@@ -24,5 +26,13 @@ public static class WebApiBuilderExtensions
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
+    }
+    public static void ApplyMigrations(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+
+        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        dbContext.Database.Migrate();
     }
 }

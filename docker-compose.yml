@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: api-container
     ports:
-      - "5000:5000" # Expón el puerto de tu API
+      - "5000:8080" # Expón el puerto de tu API
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MyDatabase;User=sa;Password=YourStrongPassword;
@@ -30,11 +30,12 @@ services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver-container
-    ports:
-      - "1433:1433" # Puerto SQL Server
+    restart: always
     environment:
-      SA_PASSWORD: "YourStrongPassword"
-      ACCEPT_EULA: "Y"
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: Password.10
+    ports:
+      - "1433:1433"
     networks:
       - app-network
 

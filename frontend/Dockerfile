@@ -1,35 +1,31 @@
-# Usar una imagen base de Node.js para la construcción
-FROM node:18-alpine as builder
+# Usa una imagen base ligera que tenga Bun preinstalado
+FROM node:18-alpine as bun-setup
 
-# Establecer el directorio de trabajo dentro de la imagen
+# Instalar Bun
+RUN apk add --no-cache curl bash \
+    && curl -fsSL https://bun.sh/install | bash \
+    && ln -s /root/.bun/bin/bun /usr/local/bin/bun
+
+# Crear una etapa de construcción para la aplicación
+FROM bun-setup as build
 WORKDIR /app
 
-# Copiar package.json y package-lock.json para aprovechar la cache de docker
-COPY package.json package-lock.json ./
-
-# Instalar las dependencias
-RUN npm install
-
-# Copiar el resto de los archivos de la aplicación a la imagen
+# Copiar los archivos del proyecto
+COPY bun.lockb package.json ./
 COPY . .
 
-# Construir la aplicación para producción
-RUN npm run build
+# Instalar dependencias usando Bun
+RUN bun install
 
-# Usar una imagen base de NGINX para servir la aplicación
+# Construir la aplicación (asume que usas Vite u otro script definido)
+RUN bun run build
+
+# Usar Nginx para servir los archivos estáticos
 FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copiar el resultado de la construcción al directorio correcto de NGINX
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Eliminar el archivo de configuración por defecto de NGINX
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copiar un archivo de configuración personalizado de NGINX
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Exponer el puerto que usará NGINX
+# Exponer el puerto 80 para Nginx
 EXPOSE 80
 
-# Iniciar NGINX
+# Iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]

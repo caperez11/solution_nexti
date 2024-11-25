@@ -32,7 +32,7 @@ namespace Infrastructure.DataBase.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 11, 25, 0, 23, 54, 869, DateTimeKind.Utc).AddTicks(1460))
+                        .HasDefaultValue(new DateTime(2024, 11, 25, 8, 55, 41, 606, DateTimeKind.Utc).AddTicks(7760))
                         .HasColumnName("created_at");
 
                     b.Property<DateTime>("DateEvent")
