@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api-container
+    ports:
+      - "5000:5000" # Expón el puerto de tu API
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MyDatabase;User=sa;Password=YourStrongPassword;
+    depends_on:
+      - sqlserver
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-container
+    ports:
+      - "3000:80" # Expón el puerto del frontend (Nginx por defecto usa el 80)
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-container
+    ports:
+      - "1433:1433" # Puerto SQL Server
+    environment:
+      SA_PASSWORD: "YourStrongPassword"
+      ACCEPT_EULA: "Y"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
