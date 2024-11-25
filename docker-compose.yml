@@ -1,0 +1,50 @@
+version: "3.9"
+
+# Definición de la red compartida
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  # 1. Base de datos SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-container
+    ports:
+      - "1433:1433" # Exponer el puerto de SQL Server
+    environment:
+      SA_PASSWORD: "Password.10" # Contraseña para el usuario 'sa'
+      ACCEPT_EULA: "Y" # Aceptar términos de licencia
+    networks:
+      - app-network
+
+  # 2. API (Web API en C#)
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api-container
+    ports:
+      - "8100:8080" # Mapea el puerto interno (8080) al puerto externo (8100)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Server=sqlserver;User Id=sa;Database=db_solution;Password=Password.10;TrustServerCertificate=true;
+    depends_on:
+      - sqlserver # Asegura que SQL Server se inicie antes de la API
+    networks:
+      - app-network
+
+  # 3. Frontend (React con Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-container
+    ports:
+      - "3000:80" # Mapea el puerto interno (80) al puerto externo (3000)
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8100/api # URL para acceder a la API
+    depends_on:
+      - api # Asegura que la API se inicie antes del frontend
+    networks:
+      - app-network
